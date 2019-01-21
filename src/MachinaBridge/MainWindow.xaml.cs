@@ -805,6 +805,19 @@ namespace MachinaBridge
                     return false;
                 }
             }
+            // tgale: DED hacking
+            else if (args[0].Equals("SetToolRef", StringComparison.CurrentCultureIgnoreCase))
+            {
+                try
+                {
+                    return bot.SetToolRef(args[1]);
+                }
+                catch (Exception ex)
+                {
+                    BadFormatInstruction(instruction, ex);
+                    return false;
+                }
+            }
             else if (args[0].Equals("Comment", StringComparison.CurrentCultureIgnoreCase))
             {
                 // Do noLightg here, just go through with it.
