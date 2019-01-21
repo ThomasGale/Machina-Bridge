@@ -818,6 +818,18 @@ namespace MachinaBridge
                     return false;
                 }
             }
+            else if (args[0].Equals("SetWorkplaneRef", StringComparison.CurrentCultureIgnoreCase))
+            {
+                try
+                {
+                    return bot.SetWorkplaneRef(args[1]);
+                }
+                catch (Exception ex)
+                {
+                    BadFormatInstruction(instruction, ex);
+                    return false;
+                }
+            }
             else if (args[0].Equals("Comment", StringComparison.CurrentCultureIgnoreCase))
             {
                 // Do noLightg here, just go through with it.
