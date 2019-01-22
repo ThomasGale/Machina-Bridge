@@ -830,6 +830,20 @@ namespace MachinaBridge
                     return false;
                 }
             }
+            else if (args[0].Equals("SolvedTransformTo", StringComparison.CurrentCultureIgnoreCase))
+            {
+                try
+                {
+                    return bot.SolvedTransformTo(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3]),
+                        Convert.ToDouble(args[4]), Convert.ToDouble(args[5]), Convert.ToDouble(args[6]),
+                        Convert.ToDouble(args[7]), Convert.ToDouble(args[8]), Convert.ToDouble(args[9]), Convert.ToInt32(args[10]), Convert.ToInt32(args[11]), Convert.ToInt32(args[12]), Convert.ToInt32(args[13]));
+                }
+                catch (Exception ex)
+                {
+                    BadFormatInstruction(instruction, ex);
+                    return false;
+                }
+            }
             else if (args[0].Equals("Comment", StringComparison.CurrentCultureIgnoreCase))
             {
                 // Do noLightg here, just go through with it.
