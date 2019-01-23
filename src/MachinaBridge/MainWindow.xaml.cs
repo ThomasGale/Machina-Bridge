@@ -37,23 +37,23 @@ namespace MachinaBridge
     {
         public static readonly string Version = "0.8.6";
 
-        public  Robot bot;
-        public  List<Tool> tools = new List<Tool>();
-        public  WebSocketServer wssv;
+        public Robot bot;
+        public List<Tool> tools = new List<Tool>();
+        public WebSocketServer wssv;
         //public  string wssvURL = "ws://127.0.0.1:6999";
         //public  string wssvBehavior = "/Bridge";
         public static string wssvURL, wssvBehavior;
 
         // Robot options (quick and dirty defaults)
-        public  string _robotName;
-        public  string _robotBrand;
-        public  string _connectionManager;
+        public string _robotName;
+        public string _robotBrand;
+        public string _connectionManager;
 
         internal List<string> _connectedClients = new List<string>();
-    
+
         // https://stackoverflow.com/a/18331866/1934487
         internal SynchronizationContext uiContext;
-        
+
         BoundContent dc;
 
         public MachinaBridgeWindow()
@@ -81,7 +81,7 @@ namespace MachinaBridge
             item.IsSelected = true;
 #endif
         }
-        
+
         private void Logger_CustomLogging(LoggerArgs e)
         {
             if (e.Level <= _maxLogLevel)
@@ -99,7 +99,7 @@ namespace MachinaBridge
         private bool ParseWebSocketURL()
         {
             string url = txtbox_WSServerURL.Text;
-            string[] parts = url.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             // Should be something like {"ws:", "127.0.0.1", "route" [, ...] } 
             if (parts.Length < 3)
             {
@@ -148,10 +148,10 @@ namespace MachinaBridge
             {
                 StopWebSocketServer();
             }
-            
+
             wssv = new WebSocketServer(wssvURL);
             wssv.AddWebSocketService(wssvBehavior, () => new BridgeBehavior(bot, this));
-            
+
             // @TODO: add a check here if the port is in use, and try a different port instead
             try
             {
@@ -222,7 +222,7 @@ namespace MachinaBridge
 
             //ScrollQueueToElement(index);
         }
-        
+
 
         private void Bot_ActionReleased(object sender, ActionReleasedArgs args)
         {
@@ -233,7 +233,7 @@ namespace MachinaBridge
         {
             this.dc.ActionsQueue.Add(new ActionWrapper(args.LastAction));
         }
-        
+
 
         public void BroadCastEvent(object sender, MachinaEventArgs e)
         {
@@ -298,7 +298,7 @@ namespace MachinaBridge
             {
                 string filename = pair.Key;
                 string content = pair.Value;
-                
+
 
                 string filepath = System.IO.Path.Combine(path, filename);
                 try
@@ -307,7 +307,7 @@ namespace MachinaBridge
                 }
                 catch
                 {
-                    Logger.Error("Could not save " + filename + " to "  + filepath);
+                    Logger.Error("Could not save " + filename + " to " + filepath);
                     Logger.Error("Could not download drivers");
                     return;
                 }
@@ -414,7 +414,7 @@ namespace MachinaBridge
 
                 Machina.MotionType mtype = bot.GetCurrentMotionMode();
                 lbl_Status_MotionMode_Value.Content = mtype.ToString();
-                
+
                 lbl_Status_Tool_Value.Content = bot.GetCurrentTool()?.name ?? "(no tool)";
 
             }, null);
@@ -558,7 +558,7 @@ namespace MachinaBridge
             }
             else if (args[0].Equals("Coordinates", StringComparison.CurrentCultureIgnoreCase))
             {
-                bot.Logger.Error($"\"{args[0]}\" is still not implemented.");   
+                bot.Logger.Error($"\"{args[0]}\" is still not implemented.");
                 return false;
             }
             else if (args[0].Equals("Temperature", StringComparison.CurrentCultureIgnoreCase) || args[0].Equals("TemperatureTo", StringComparison.CurrentCultureIgnoreCase))
@@ -835,7 +835,7 @@ namespace MachinaBridge
                 try
                 {
                     return bot.SetDEDParameters(
-                        Convert.ToDouble(args[5]), 
+                        Convert.ToDouble(args[5]),
                         Convert.ToDouble(args[6])
                         );
                 }
@@ -852,6 +852,20 @@ namespace MachinaBridge
                     return bot.SolvedTransformTo(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3]),
                         Convert.ToDouble(args[4]), Convert.ToDouble(args[5]), Convert.ToDouble(args[6]),
                         Convert.ToDouble(args[7]), Convert.ToDouble(args[8]), Convert.ToDouble(args[9]), Convert.ToInt32(args[10]), Convert.ToInt32(args[11]), Convert.ToInt32(args[12]), Convert.ToInt32(args[13]));
+                }
+                catch (Exception ex)
+                {
+                    BadFormatInstruction(instruction, ex);
+                    return false;
+                }
+            }
+            else if (args[0].Equals("DEDSolvedTransformTo", StringComparison.CurrentCultureIgnoreCase))
+            {
+                try
+                {
+                    return bot.SolvedDEDTransformTo(Convert.ToDouble(args[1]), Convert.ToDouble(args[2]), Convert.ToDouble(args[3]),
+                        Convert.ToDouble(args[4]), Convert.ToDouble(args[5]), Convert.ToDouble(args[6]),
+                        Convert.ToDouble(args[7]), Convert.ToDouble(args[8]), Convert.ToDouble(args[9]), Convert.ToInt32(args[10]), Convert.ToInt32(args[11]), Convert.ToInt32(args[12]), Convert.ToInt32(args[13]), (ActionDEDSolvedTransform.DEDMode)Convert.ToInt32(args[14]));
                 }
                 catch (Exception ex)
                 {
