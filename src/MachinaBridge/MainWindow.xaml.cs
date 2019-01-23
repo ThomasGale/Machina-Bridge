@@ -830,6 +830,21 @@ namespace MachinaBridge
                     return false;
                 }
             }
+            else if (args[0].Equals("DEDParameter", StringComparison.CurrentCultureIgnoreCase))
+            {
+                try
+                {
+                    return bot.SetDEDParameters(
+                        Convert.ToDouble(args[5]), 
+                        Convert.ToDouble(args[6])
+                        );
+                }
+                catch (Exception ex)
+                {
+                    BadFormatInstruction(instruction, ex);
+                    return false;
+                }
+            }
             else if (args[0].Equals("SolvedTransformTo", StringComparison.CurrentCultureIgnoreCase))
             {
                 try
