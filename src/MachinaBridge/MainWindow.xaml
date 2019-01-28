@@ -99,7 +99,7 @@
                Margin="10,350,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width ="72" 
                FontFamily=".\Resources\#IBM Plex Sans Light" Foreground="White"/>
         <TextBox x:Name="txtbox_IP" 
-                 Text="127.0.0.1" 
+                 Text="192.168.125.1" 
                  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1"
                  Margin="87,354,10,0" VerticalAlignment="Top" Height="22" Padding="3"
                  FontFamily=".\Resources\#IBM Plex Mono Medium" FontSize="10" TextAlignment="Right"/>
